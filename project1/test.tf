@@ -14,3 +14,7 @@ resource "aws_ami" "example" {
 }
 
 variable "cp_tf_var" {}
+
+provider "aws" {
+  region = "us-west-2"
+}
