@@ -17,6 +17,13 @@ resource "spacelift_stack" "test-stack" {
   ]
 }
 
+resource "spacelift_aws_role" "k8s-core" {
+  for_each = local.stack_set
+  stack_id = spacelift_stack.test-stack[each.key].id
+  role_arn = "arn:aws:iam::102456302505:role/Implementation-Team-Sandbox"
+}
+
+
 locals {
   project_root  = "/${reverse(split("/", path.cwd))[0]}"
   cp_tfvarfiles = fileset("../..${local.project_root}/cp_tfvarfiles", "*.cp.tfvars")
