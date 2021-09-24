@@ -3,8 +3,8 @@ resource "spacelift_stack" "test-stack" {
   administrative      = true
   autodeploy          = true
   branch              = "master"
-  description         = "Shared cluster services (Datadog, Istio etc.)"
-  name                = "Kubernetes core services"
+  description         = "Stack for workspace ${each.key}"
+  name                = each.key
   project_root        = local.project_root
   repository          = "dunda-test"
   manage_state        = false
@@ -21,6 +21,15 @@ resource "spacelift_aws_role" "k8s-core" {
   for_each = local.stack_set
   stack_id = spacelift_stack.test-stack[each.key].id
   role_arn = "arn:aws:iam::102456302505:role/Implementation-Team-Sandbox"
+}
+
+resource "spacelift_run" "this" {
+  for_each = local.stack_set
+  stack_id = spacelift_stack.test-stack[each.key].id
+
+  keepers = {
+    terraform_workspace = each.key
+  }
 }
 
 
