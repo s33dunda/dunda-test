@@ -32,6 +32,27 @@ resource "spacelift_run" "this" {
   }
 }
 
+resource "spacelift_policy_attachment" "slack" {
+  for_each  = local.stack_set
+  policy_id = spacelift_policy.slack.id
+  stack_id  = spacelift_stack.test-stack[each.key].id
+}
+
+resource "spacelift_policy" "slack" {
+  name = "test-slack"
+  type = "ACCESS"
+  body = <<EOF
+  package spacelift
+
+  write {
+    input.slack.channel.name = "spacelift-chat"
+  }
+
+  read {
+    input.slack.channel.name = "spacelift-chat"
+  }
+EOF
+}
 
 locals {
   project_root  = "/${reverse(split("/", path.cwd))[0]}"
