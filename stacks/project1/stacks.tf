@@ -7,6 +7,7 @@ resource "spacelift_stack" "test-stack" {
   name                = "Kubernetes core services"
   project_root        = local.project_root
   repository          = "dunda-test"
+  manage_state        = false
   terraform_workspace = each.key
 }
 
