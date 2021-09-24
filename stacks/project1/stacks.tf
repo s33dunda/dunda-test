@@ -9,6 +9,12 @@ resource "spacelift_stack" "test-stack" {
   repository          = "dunda-test"
   manage_state        = false
   terraform_workspace = each.key
+  before_plan = [
+    "export FILE=\"cp_tfvarfiles/$(terraform workspace show).cp.tfvars\"",
+    "if [ -f \"$FILE\" ]; then export TF_CLI_ARGS=-var-file=\"cp_tfvarfiles/$(terraform workspace show).cp.tfvars\"; fi",
+    # "export FILE=\"tfvarfiles/$(terraform workspace show).tfvars\"",
+    # "if [ -f \"$FILE\" ]; then export TF_CLI_ARGS=-var-file=\"cp_tfvarfiles/$(terraform workspace show).cp.tfvars\"; fi"
+  ]
 }
 
 locals {
