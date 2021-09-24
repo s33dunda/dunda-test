@@ -48,6 +48,10 @@ resource "spacelift_policy" "slack" {
     input.slack.channel.name = "spacelift-chat"
   }
 
+  write {
+    input.slack.user.display_name = "dunda"
+  }
+
   read {
     input.slack.channel.name = "spacelift-chat"
   }
