@@ -8,7 +8,7 @@ resource "aws_ami" "example" {
 
   ebs_block_device {
     device_name = "/dev/xvda"
-    snapshot_id = "snap-xxxxxxxx"
+    snapshot_id = "snap-0b0409130922ca238"
     volume_size = 8
   }
 }
