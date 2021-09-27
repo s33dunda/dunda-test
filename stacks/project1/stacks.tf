@@ -32,7 +32,6 @@ resource "spacelift_aws_role" "k8s-core" {
 resource "spacelift_run" "this" {
   for_each = local.stack_set
   stack_id = spacelift_stack.test-stack[each.key].id
-
   keepers = {
     terraform_workspace = each.key
   }
@@ -63,6 +62,7 @@ resource "spacelift_policy" "slack" {
   }
 EOF
 }
+
 
 terraform {
   required_providers {
