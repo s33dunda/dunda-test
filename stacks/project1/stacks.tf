@@ -1,3 +1,9 @@
+locals {
+  project_root  = "/${reverse(split("/", path.cwd))[0]}"
+  cp_tfvarfiles = fileset("../..${local.project_root}/cp_tfvarfiles", "*.cp.tfvars")
+  stack_set     = toset([for file in local.cp_tfvarfiles : split(".", file)[0]])
+}
+
 resource "spacelift_stack" "test-stack" {
   for_each            = local.stack_set
   administrative      = true
@@ -26,7 +32,6 @@ resource "spacelift_aws_role" "k8s-core" {
 resource "spacelift_run" "this" {
   for_each = local.stack_set
   stack_id = spacelift_stack.test-stack[each.key].id
-
   keepers = {
     terraform_workspace = each.key
   }
@@ -58,11 +63,6 @@ resource "spacelift_policy" "slack" {
 EOF
 }
 
-locals {
-  project_root  = "/${reverse(split("/", path.cwd))[0]}"
-  cp_tfvarfiles = fileset("../..${local.project_root}/cp_tfvarfiles", "*.cp.tfvars")
-  stack_set     = toset([for file in local.cp_tfvarfiles : split(".", file)[0]])
-}
 
 terraform {
   required_providers {
