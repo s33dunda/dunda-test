@@ -1,3 +1,9 @@
+locals {
+  project_root  = "/${reverse(split("/", path.cwd))[0]}"
+  cp_tfvarfiles = fileset("../..${local.project_root}/cp_tfvarfiles", "*.cp.tfvars")
+  stack_set     = toset([for file in local.cp_tfvarfiles : split(".", file)[0]])
+}
+
 resource "spacelift_stack" "test-stack" {
   for_each            = local.stack_set
   administrative      = true
@@ -56,12 +62,6 @@ resource "spacelift_policy" "slack" {
     input.slack.channel.name = "spacelift-chat"
   }
 EOF
-}
-
-locals {
-  project_root  = "/${reverse(split("/", path.cwd))[0]}"
-  cp_tfvarfiles = fileset("../..${local.project_root}/cp_tfvarfiles", "*.cp.tfvars")
-  stack_set     = toset([for file in local.cp_tfvarfiles : split(".", file)[0]])
 }
 
 terraform {
