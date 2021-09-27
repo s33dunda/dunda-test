@@ -6,7 +6,7 @@ locals {
 
 resource "spacelift_stack" "test-stack" {
   for_each            = local.stack_set
-  administrative      = true
+  administrative      = false
   autodeploy          = false
   branch              = "master"
   description         = "Stack for workspace ${each.key}"
