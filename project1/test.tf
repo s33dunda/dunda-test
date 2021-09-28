@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_log_group" "yada" {
-  name = "Yada-${var.cp_tf_var}-${terraform.workspace}"
+  name = "Yada-yada-${var.cp_tf_var}-${terraform.workspace}"
 
   tags = {
     Environment = "production"
