@@ -43,6 +43,14 @@ resource "spacelift_policy_attachment" "slack" {
   stack_id  = spacelift_stack.test-stack[each.key].id
 }
 
+
+resource "spacelift_policy_attachment" "iam-key-deny" {
+  for_each  = local.stack_set
+  policy_id = "aws-access-key"
+  stack_id  = spacelift_stack.test-stack[each.key].id
+}
+
+
 resource "spacelift_policy" "slack" {
   name = "test-slack"
   type = "ACCESS"
