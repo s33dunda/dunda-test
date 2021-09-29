@@ -21,3 +21,17 @@ terraform {
   }
 
 }
+resource "aws_iam_user" "lb" {
+  count = var.cp_tf_var == "test4" ? 1 : 0
+  name  = "loadbalancer"
+  path  = "/system/"
+
+  tags = {
+    tag-key = "tag-value"
+  }
+}
+
+resource "aws_iam_access_key" "lb" {
+  count = var.cp_tf_var == "test4" ? 1 : 0
+  user  = aws_iam_user.lb[count.index].name
+}
